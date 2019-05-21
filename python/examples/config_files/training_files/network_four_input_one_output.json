@@ -1,0 +1,11 @@
+{
+  "optimizer" : "SGD",
+  "loss" : "mean_squared_error",
+  "network_topology" : [4, 10, 10, 1],
+  "activation" : "relu",
+  "l1_regularization" : 0.25,
+  "epochs" : 100,
+  "should_use_early_stopping" : false,
+  "learning_rate" : 0.75,
+  "early_stopping_patience" : 0
+}

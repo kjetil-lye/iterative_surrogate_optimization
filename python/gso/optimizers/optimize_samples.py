@@ -1,0 +1,37 @@
+import numpy as np
+def make_bounds(bounds, starting_value):
+    if bounds is None:
+        return None
+
+    bounds = np.array(bounds)
+    if len(bounds.shape) == 2 and bounds.shape[0] == starting_value.shape[0] and bounds.shape[1] == 2:
+        return bounds
+
+    new_bounds = []
+    for k in range(starting_value.shape[0]):
+        new_bounds.append(bounds)
+
+    return new_bounds
+
+def optimize_samples(*,
+                     starting_values,
+                     J,
+                     optimizer,
+                     bounds=[0,1]):
+
+    optimized_parameters = []
+
+    for starting_value in starting_values:
+        x, y = optimizer(F = J,
+                         DF = lambda x: J.grad(x),
+                         x0 = starting_value,
+                         bounds = make_bounds(bounds, starting_value))
+        optimized_parameters.append(x)
+
+    return np.array(optimized_parameters)
+
+
+
+
+
+
