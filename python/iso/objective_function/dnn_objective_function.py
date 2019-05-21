@@ -1,4 +1,4 @@
-import gso.gradients
+import iso.gradients
 
 
 class DNNObjectiveFunction(object):
@@ -6,7 +6,7 @@ class DNNObjectiveFunction(object):
                  J: callable):
         self.models = models
         self.J = J
-        self.gradient = gso.gradients.ChainRuleModel(models, J)
+        self.gradient = iso.gradients.ChainRuleModel(models, J)
 
     def __call__(self, x):
         if len(x.shape) != 2:

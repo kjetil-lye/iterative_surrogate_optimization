@@ -3,7 +3,7 @@
 
 if __name__ == '__main__':
     import argparse
-    from gso.samples import create_sample_generator
+    from iso.samples import create_sample_generator
     import numpy as np
 
     parser = argparse.ArgumentParser(description="""

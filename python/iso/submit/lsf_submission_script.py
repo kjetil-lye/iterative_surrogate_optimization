@@ -1,4 +1,4 @@
-from gso.submit import SubmissionScript
+from iso.submit import SubmissionScript
 import subprocess
 class LsfSubmissionScript(SubmissionScript):
     def __init__(self, job_chain = None):

@@ -1,13 +1,13 @@
-from gso.train import Parameters
-import gso.train.optimizers
+from iso.train import Parameters
+import iso.train.optimizers
 import h5py
 
 class SimpleTrainer(object):
 
     def __init__(self, *, training_parameters: Parameters,
                  model):
-        model.compile(optimizer=gso.train.optimizers.create_optimizer(training_parameters.optimizer,
-                                                                     training_parameters.learning_rate),
+        model.compile(optimizer=iso.train.optimizers.create_optimizer(training_parameters.optimizer,
+                                                                      training_parameters.learning_rate),
                       loss=training_parameters.loss)
 
         self.epochs = training_parameters.epochs

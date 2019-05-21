@@ -1,4 +1,4 @@
-from gso.samples import MonteCarlo, Sobol
+from iso.samples import MonteCarlo, Sobol
 
 class SampleGeneratorFactory(object):
 

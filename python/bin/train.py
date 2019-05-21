@@ -1,6 +1,6 @@
 #!/bin/env python
 
-import gso.train
+import iso.train
 
 if __name__ == '__main__':
     import argparse
@@ -37,7 +37,7 @@ value_sample_1
 
     args = parser.parse_args()
 
-    trainer = gso.train.create_trainer_from_simple_file(args.simple_configuration_file)
+    trainer = iso.train.create_trainer_from_simple_file(args.simple_configuration_file)
 
     parameters = np.loadtxt(args.input_parameters_file)
     values = np.loadtxt(args.input_values_file)

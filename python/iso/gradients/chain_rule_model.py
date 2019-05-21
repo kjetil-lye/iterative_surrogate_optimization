@@ -1,4 +1,4 @@
-from gso.gradients import TensorGradient
+from iso.gradients import TensorGradient
 import numpy as np
 
 
