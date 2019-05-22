@@ -1,16 +1,16 @@
 import unittest
-import iso.samples
+import.ismo.samples
 
 
 class TestMonteCarlo(unittest.TestCase):
 
     def test_factory(self):
-        monte_carlo = iso.samples.create_sample_generator('monte-carlo')
+        monte_carlo =.ismo.samples.create_sample_generator('monte-carlo')
 
-        self.assertEqual(type(monte_carlo), iso.samples.MonteCarlo)
+        self.assertEqual(type(monte_carlo),.ismo.samples.MonteCarlo)
 
     def test_first_samples_start(self):
-        monte_carlo = iso.samples.create_sample_generator('monte-carlo')
+        monte_carlo =.ismo.samples.create_sample_generator('monte-carlo')
 
         dimension = 4
         M = 8

@@ -1,7 +1,7 @@
 #!/bin/env python
 
-import iso.optimizers
-import iso.objective_function
+import.ismo.optimizers
+import.ismo.objective_function
 import keras.models
 
 if __name__ == '__main__':
@@ -42,15 +42,15 @@ parameter_sample_1
 
     starting_values = np.loadtxt(args.input_parameters_file)
 
-    objective_function = iso.objective_function.load_objective_function_from_python_file(args.objective_python_module,
+    objective_function =.ismo.objective_function.load_objective_function_from_python_file(args.objective_python_module,
                                                                                          args.objective_python_class,
                                                                                          {})
 
-    objective_function_dnn = iso.objective_function.DNNObjectiveFunction(models, objective_function)
+    objective_function_dnn =.ismo.objective_function.DNNObjectiveFunction(models, objective_function)
 
-    optimizer = iso.optimizers.create_optimizer(args.optimizer_name)
+    optimizer =.ismo.optimizers.create_optimizer(args.optimizer_name)
 
-    optimized_parameters = iso.optimizers.optimize_samples(
+    optimized_parameters =.ismo.optimizers.optimize_samples(
         starting_values=starting_values,
         J=objective_function,
         optimizer=optimizer)
