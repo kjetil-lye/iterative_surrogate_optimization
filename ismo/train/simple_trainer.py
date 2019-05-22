@@ -6,7 +6,7 @@ class SimpleTrainer(object):
 
     def __init__(self, *, training_parameters: Parameters,
                  model):
-        model.compile(optimizerismo.train.optimizers.create_optimizer(training_parameters.optimizer,
+        model.compile(optimizer=ismo.train.optimizers.create_optimizer(training_parameters.optimizer,
                                                                       training_parameters.learning_rate),
                       loss=training_parameters.loss)
 

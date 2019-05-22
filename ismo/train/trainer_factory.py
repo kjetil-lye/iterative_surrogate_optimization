@@ -6,6 +6,6 @@ def create_trainer_from_simple_file(filename):
 
     parameters =ismo.train.parameters_from_simple_config_file(filename)
 
-    returnismo.train.SimpleTrainer(training_parameters=parameters,
+    return ismo.train.SimpleTrainer(training_parameters=parameters,
                                    model=model)
 

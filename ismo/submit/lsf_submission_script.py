@@ -1,5 +1,8 @@
 from ismo.submit import SubmissionScript
+from ismo.submit import Command
 import subprocess
+
+
 class LsfSubmissionScript(SubmissionScript):
     def __init__(self, job_chain = None):
         self.job_chain = job_chain
@@ -8,8 +11,9 @@ class LsfSubmissionScript(SubmissionScript):
 
             self.first_time_job_chain = True
 
-    def __call__(self, command, *,
-                 number_of_processes,
+    def __call__(self, command : Command,
+                 *,
+                 number_of_processes=1,
                  wait_time_in_hours=None,
                  memory_limit_in_mb=None):
 
@@ -26,11 +30,11 @@ class LsfSubmissionScript(SubmissionScript):
             submit_command.extend(['-J', '{}'.format(self.job_chain)])
 
         if not self.first_time_job_chain:
-            submit_command.extend(['-w', '"done({})"'.format(self.job_chain))])
+            submit_command.extend(['-w', '"done({})"'.format(self.job_chain)])
 
         self.first_time_job_chain = False
 
-        submit_command.apepnd(command)
+        submit_command.extend(command.tolist())
         subprocess.call(submit_command, check=True)
 
 
