@@ -4,7 +4,7 @@ if __name__ == '__main__':
     import argparse
 
     parser = argparse.ArgumentParser(description="""
-Runs the function sin(4*pi*x) on the input parameters
+Runs some complicated function on the input parameters
     """)
 
     parser.add_argument('--input_parameters_file', type=str, required=True,
