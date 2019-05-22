@@ -52,7 +52,7 @@ parameter_sample_1
 
     optimized_parameters =ismo.optimizers.optimize_samples(
         starting_values=starting_values,
-        J=objective_function,
+        J=objective_function_dnn,
         optimizer=optimizer)
 
     np.savetxt(args.output_parameters_file, optimized_parameters)

@@ -4,12 +4,15 @@ import subprocess
 
 
 class LsfSubmissionScript(SubmissionScript):
-    def __init__(self, job_chain = None):
+    def __init__(self, job_chain = None,
+                 command_runner = lambda submit_command: subprocess.run(submit_command, check=True)):
         self.job_chain = job_chain
 
         if job_chain is not None:
 
             self.first_time_job_chain = True
+
+        self.command_runner = command_runner
 
     def __call__(self, command : Command,
                  *,
@@ -35,7 +38,7 @@ class LsfSubmissionScript(SubmissionScript):
         self.first_time_job_chain = False
 
         submit_command.extend(command.tolist())
-        subprocess.call(submit_command, check=True)
+        self.command_runner(submit_command)
 
 
 

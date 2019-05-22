@@ -23,7 +23,7 @@ class ChainRuleModel(object):
 
         grad_J = self.J.grad(u)
 
-        grad_full = np.zeros((x.shape[0]))
+        grad_full = np.zeros(np.prod(x.shape))
 
         for i in range(grad_full.shape[0]):
             for j in range(u.shape[0]):

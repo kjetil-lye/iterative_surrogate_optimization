@@ -9,8 +9,11 @@ class Command(object):
         command_list = copy.deepcopy(self.command)
 
         for key, item in kwargs.items():
-            command_list.append('--{}'.format(item))
-            command_list.append('{}'.format(item))
+            command_list.append('--{}'.format(key))
+            if type(item) == list:
+                command_list.extend(item)
+            else:
+                command_list.append('{}'.format(item))
 
         return Command(command_list)
 

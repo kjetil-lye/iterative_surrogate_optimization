@@ -1,4 +1,5 @@
 import ismo.gradients
+import numpy as np
 
 
 class DNNObjectiveFunction(object):

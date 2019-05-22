@@ -12,9 +12,12 @@ class Commands(object):
                  training_parameter_config_file,
                  optimize_target_file,
                  optimize_target_class,
+                 dimension,
                  number_of_output_values=1,
                  python_command='python',
+
                  ):
+        self.parameter_for_optimization_basename = 'parameters_for_optimization_{}.txt'
         self.parameter_basename = 'parameters_{}.txt'
         self.model_file_basename = 'model_{iteration_number}_{value_number}.h5'
         self.values_basename = 'values_{iteration_number}_{value_number}.txt'
@@ -29,9 +32,12 @@ class Commands(object):
         self.optimize_wait_time_in_hours = 24
 
         self.number_of_output_values = number_of_output_values
+        self.dimension=dimension
+
+        self.number_of_samples_generated = 0
 
     def __run_python_module(self, module):
-        return Command(["python", "-m", module])
+        return Command([self.python_command, "-m", module])
 
     def train(self, submitter, iteration_number):
         command = self.__run_python_module("ismo.bin.train")
@@ -44,38 +50,44 @@ class Commands(object):
             output_model_file = self.model_file_basename.format(iteration_number=iteration_number,
                                                                 value_number=value_number)
 
-            command = command.with_long_arguments(number_of_samples=number_of_samples,
+            command = command.with_long_arguments(
                                                   input_parameters_file=input_parameters_file,
                                                   input_values_file=input_values_file,
-                                                  simple_configuration_file=self.trainining_parameter_config_file,
+                                                  simple_configuration_file=self.training_parameter_config_file,
                                                   output_model_file=output_model_file
                                                   )
             submitter(command, wait_time_in_hours=self.training_wait_time_in_hours)
 
     def generate_samples(self, submitter, iteration_number,*,  number_of_samples):
         command = self.__run_python_module("ismo.bin.generate_samples")
-
-        output_parameters_file = self.parameter_basename.format(iteration_number)
+        if iteration_number == 0:
+            output_parameters_file = self.parameter_basename.format(iteration_number)
+        else:
+            output_parameters_file = self.parameter_for_optimization_basename.format(iteration_number)
 
         command = command.with_long_arguments(number_of_samples=number_of_samples,
-                                              output_parameters_file=output_parameters_file)
+                                              output_file=output_parameters_file,
+                                              dimension=self.dimension,
+                                              start=self.number_of_samples_generated)
 
         submitter(command)
+
+        self.number_of_samples_generated += number_of_samples
 
     def optimize(self, submitter, iteration_number):
         command = self.__run_python_module("ismo.bin.optimize")
 
-        input_parameters_file = self.parameter_basename.format(iteration_number-1)
+        input_parameters_file = self.parameter_for_optimization_basename .format(iteration_number)
 
         output_parameters_file = self.parameter_basename.format(iteration_number)
 
         models = [self.model_file_basename.format(iteration_number=iteration_number-1, value_number=k)
                   for k in range(self.number_of_output_values)]
 
-        models_as_string = " ".join(models)
+
 
         command = command.with_long_arguments(output_parameters_file=output_parameters_file,
-                                              input_model_files=models_as_string,
+                                              input_model_files=models,
                                               objective_python_module=self.optimize_target_file,
                                               objective_python_class=self.optimize_target_class,
                                               input_parameters_file=input_parameters_file)
@@ -84,7 +96,7 @@ class Commands(object):
 
     def evolve(self, submitter, iteration_number):
         input_parameters_file = self.parameter_basename.format(iteration_number)
-        output_value_files = [self.values_basename.format(iteration_number=iteration_number-1, value_number=k)
+        output_value_files = [self.values_basename.format(iteration_number=iteration_number, value_number=k)
                   for k in range(self.number_of_output_values)]
 
         self.do_evolve(submitter,

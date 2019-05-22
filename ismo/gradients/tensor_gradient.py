@@ -11,8 +11,8 @@ class TensorGradient(object):
     def __call__(self, x):
 
         if len(x.shape) != 2:
-            x_reshaped = x.reshape(1, x.shape[0])
+            x = x.reshape(1, x.shape[0])
         # See https://stackoverflow.com/questions/54566337/how-to-get-gradient-values-using-keras-backend-gradients
-        evaluated_gradients = self.sess.run(self.gradients[0], feed_dict={self.model.input: x_reshaped})
+        evaluated_gradients = self.sess.run(self.gradients[0], feed_dict={self.model.input: x})
 
         return evaluated_gradients

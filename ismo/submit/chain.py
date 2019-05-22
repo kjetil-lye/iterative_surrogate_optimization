@@ -1,12 +1,13 @@
-import ismo.submit.defaults
-import ismo.submit
+
+from ismo.submit import SubmissionScript
+from ismo.submit.defaults import Commands
 
 
 class Chain(object):
     def __init__(self, number_of_samples_per_iteration,
-                 submitter: ismo.submit.SubmissionScript,
+                 submitter: SubmissionScript,
                  *,
-                 commands: ismo.submit.defaults.Commands
+                 commands: Commands
                  ):
 
         self.number_of_samples_per_iteration = number_of_samples_per_iteration

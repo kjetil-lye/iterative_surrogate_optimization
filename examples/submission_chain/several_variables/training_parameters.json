@@ -1,0 +1,10 @@
+{
+  "optimizer" : "Adam",
+  "loss" : "mean_squared_error",
+  "network_topology" : [20, 10, 10,10,10,10, 1],
+  "activation" : "relu",
+  "epochs" : 50000,
+  "should_use_early_stopping" : true,
+  "learning_rate" : 0.001,
+  "early_stopping_patience" : 50
+}

@@ -3,6 +3,9 @@ def make_bounds(bounds, starting_value):
     if bounds is None:
         return None
 
+    if type(starting_value) == float or len(starting_value.shape) == 0:
+        return [bounds]
+
     bounds = np.array(bounds)
     if len(bounds.shape) == 2 and bounds.shape[0] == starting_value.shape[0] and bounds.shape[1] == 2:
         return bounds

@@ -1,6 +1,8 @@
 from ismo.train import Parameters
 import ismo.train.optimizers
 import h5py
+import keras.callbacks
+
 
 class SimpleTrainer(object):
 
@@ -14,9 +16,13 @@ class SimpleTrainer(object):
 
         self.model = model
 
+        self.callbacks = []
+        if training_parameters.should_use_early_stopping:
+            self.callbacks.append(keras.callbacks.EarlyStopping(monitor='loss', patience=training_parameters.early_stopping_patience))
+
     def fit(self, parameters, values):
         self.model.fit(parameters, values, batch_size=parameters.shape[0],
-                  epochs=self.epochs)
+                  epochs=self.epochs, verbose=0, callbacks=self.callbacks)
 
     def save_to_file(self, outputname):
         self.model.save(outputname)
