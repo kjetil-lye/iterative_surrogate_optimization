@@ -27,6 +27,7 @@ class Commands(object):
         self.parameter_basename = prefix + 'parameters_{}.txt'
         self.model_file_basename = prefix + 'model_{iteration_number}_{value_number}.h5'
         self.values_basename = prefix + 'values_{iteration_number}_{value_number}.txt'
+        self.objective_basename = prefix + 'objective_{}.txt'
 
         self.python_command = python_command
         self.training_parameter_config_file = training_parameter_config_file
@@ -123,6 +124,19 @@ class Commands(object):
                        input_parameters_file = input_parameters_file,
                        output_value_files=output_value_files
                        )
+
+        # evaluate the objective
+        objective_output = self.objective_basename.format(iteration_number)
+        objective_eval = self.__run_python_module("ismo.bin.evaluate_objective")
+        objective_eval = objective_eval.with_long_arguments(input_values_files=output_value_files,
+                                                            objective_python_module=self.optimize_target_file,
+                                                            objective_python_class=self.optimize_target_class,
+                                                            output_objective_file=objective_output,
+                                                            **self.additional_objective_arguments
+                                                            )
+
+        submitter(objective_eval)
+
 
     def do_evolve(self, submitter,
                   *,
