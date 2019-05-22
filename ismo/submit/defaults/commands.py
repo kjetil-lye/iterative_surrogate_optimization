@@ -19,7 +19,8 @@ class Commands(object):
                  starting_sample=0,
                  optimization_parameter_file=None,
                  optimizer_name='L-BFGS-B',
-                 objective_parameter_file=None
+                 objective_parameter_file=None,
+                 sample_generator_name='monte-carlo'
                  ):
         self.prefix = prefix
 
@@ -52,6 +53,8 @@ class Commands(object):
 
         if objective_parameter_file is not None:
             self.additional_objective_arguments['objective_parameter_file'] = objective_parameter_file
+
+        self.sample_generator_name = sample_generator_name
 
 
     def __run_python_module(self, module):
@@ -86,7 +89,8 @@ class Commands(object):
         command = command.with_long_arguments(number_of_samples=number_of_samples,
                                               output_file=output_parameters_file,
                                               dimension=self.dimension,
-                                              start=self.number_of_samples_generated)
+                                              start=self.number_of_samples_generated,
+                                              generator=self.sample_generator_name)
 
         submitter(command)
 
