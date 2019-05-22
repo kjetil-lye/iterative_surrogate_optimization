@@ -1,0 +1,5 @@
+{
+  "cos_penalty": 1e3,
+  "sin_penalty": 1,
+  "tan_penalty": 8
+}

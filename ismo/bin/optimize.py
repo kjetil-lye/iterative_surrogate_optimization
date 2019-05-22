@@ -1,5 +1,6 @@
 #!/bin/env python
 
+import json
 import ismo.optimizers
 import ismo.objective_function
 import keras.models
@@ -36,21 +37,40 @@ parameter_sample_1
     parser.add_argument('--optimizer_name', type=str, default='L-BFGS-B',
                         help='Name of the optimizer')
 
+    parser.add_argument('--optimization_parameter_file', type=str,
+                        help='Parameter file the optimization')
+
+    parser.add_argument('--objective_parameter_file', type=str,
+                        help='Parameter file the optimization')
+
     args = parser.parse_args()
 
     models = [keras.models.load_model(filename) for filename in args.input_model_files]
 
     starting_values = np.loadtxt(args.input_parameters_file)
 
-    objective_function =ismo.objective_function.load_objective_function_from_python_file(args.objective_python_module,
-                                                                                         args.objective_python_class,
-                                                                                         {})
+    if args.optimization_parameter_file:
+        with open (args.optimization_parameter_file) as config_file:
+            optimization_configuration = json.load(config_file)
+    else:
+        optimization_configuration = {}
 
-    objective_function_dnn =ismo.objective_function.DNNObjectiveFunction(models, objective_function)
 
-    optimizer =ismo.optimizers.create_optimizer(args.optimizer_name)
+    if args.objective_parameter_file:
+        with open (args.objective_parameter_file) as config_file:
+            objective_configuration = json.load(config_file)
+    else:
+        objective_configuration = {}
 
-    optimized_parameters =ismo.optimizers.optimize_samples(
+    objective_function = ismo.objective_function.load_objective_function_from_python_file(args.objective_python_module,
+                                                                                          args.objective_python_class,
+                                                                                          objective_configuration)
+
+    objective_function_dnn = ismo.objective_function.DNNObjectiveFunction(models, objective_function)
+
+    optimizer = ismo.optimizers.create_optimizer(args.optimizer_name)
+
+    optimized_parameters = ismo.optimizers.optimize_samples(
         starting_values=starting_values,
         J=objective_function_dnn,
         optimizer=optimizer)

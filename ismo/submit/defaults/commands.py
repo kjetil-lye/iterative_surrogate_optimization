@@ -8,19 +8,25 @@ class Commands(object):
 
     def __init__(self,
                  *,
-
                  training_parameter_config_file,
                  optimize_target_file,
                  optimize_target_class,
+
                  dimension,
                  number_of_output_values=1,
                  python_command='python',
-
+                 prefix='',
+                 starting_sample=0,
+                 optimization_parameter_file=None,
+                 optimizer_name='L-BFGS-B',
+                 objective_parameter_file=None
                  ):
-        self.parameter_for_optimization_basename = 'parameters_for_optimization_{}.txt'
-        self.parameter_basename = 'parameters_{}.txt'
-        self.model_file_basename = 'model_{iteration_number}_{value_number}.h5'
-        self.values_basename = 'values_{iteration_number}_{value_number}.txt'
+        self.prefix = prefix
+
+        self.parameter_for_optimization_basename = prefix + 'parameters_for_optimization_{}.txt'
+        self.parameter_basename = prefix + 'parameters_{}.txt'
+        self.model_file_basename = prefix + 'model_{iteration_number}_{value_number}.h5'
+        self.values_basename = prefix + 'values_{iteration_number}_{value_number}.txt'
 
         self.python_command = python_command
         self.training_parameter_config_file = training_parameter_config_file
@@ -34,7 +40,18 @@ class Commands(object):
         self.number_of_output_values = number_of_output_values
         self.dimension=dimension
 
-        self.number_of_samples_generated = 0
+        self.number_of_samples_generated = starting_sample
+
+        self.additional_optimizer_arguments = {'optimizer_name' : optimizer_name}
+
+        if optimization_parameter_file is not None:
+            self.additional_optimizer_arguments['optimization_parameter_file'] = optimization_parameter_file
+
+        self.additional_objective_arguments = {}
+
+        if objective_parameter_file is not None:
+            self.additional_objective_arguments['objective_parameter_file'] = objective_parameter_file
+
 
     def __run_python_module(self, module):
         return Command([self.python_command, "-m", module])
@@ -90,7 +107,9 @@ class Commands(object):
                                               input_model_files=models,
                                               objective_python_module=self.optimize_target_file,
                                               objective_python_class=self.optimize_target_class,
-                                              input_parameters_file=input_parameters_file)
+                                              input_parameters_file=input_parameters_file,
+                                              **self.additional_optimizer_arguments,
+                                              **self.additional_objective_arguments)
 
         submitter(command, wait_time_in_hours=self.optimize_wait_time_in_hours)
 

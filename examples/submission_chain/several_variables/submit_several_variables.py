@@ -7,8 +7,8 @@ class SeveralVariablesCommands(ismo.submit.defaults.Commands):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-        self.preproccsed_filename_base = 'preprocessed_values_{}.txt'
-        self.simulated_output_filename_base = 'simulation_output_{}.txt'
+        self.preproccsed_filename_base = self.prefix + 'preprocessed_values_{}.txt'
+        self.simulated_output_filename_base = self.prefix + 'simulation_output_{}.txt'
 
     def do_evolve(self, submitter,
                   *,
@@ -64,7 +64,8 @@ Submits all the jobs for the sine experiments
                                         training_parameter_config_file='training_parameters.json',
                                         optimize_target_file='objective.py',
                                         optimize_target_class='Objective',
-                                        python_command=sys.executable
+                                        python_command=sys.executable,
+                                        objective_parameter_file='penalties.json'
                                         )
 
     chain = ismo.submit.Chain(args.number_of_samples_per_iteration, submitter,
