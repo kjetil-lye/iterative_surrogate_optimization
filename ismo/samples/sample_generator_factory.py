@@ -1,4 +1,4 @@
-from.ismo.samples import MonteCarlo, Sobol
+from ismo.samples import MonteCarlo, Sobol
 
 class SampleGeneratorFactory(object):
 

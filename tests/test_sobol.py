@@ -1,16 +1,16 @@
 import unittest
-import.ismo.samples
+import ismo.samples
 
 
 class TestSobol(unittest.TestCase):
 
     def test_factory(self):
-        sobol =.ismo.samples.create_sample_generator('sobol')
+        sobol =ismo.samples.create_sample_generator('sobol')
 
-        self.assertEqual(type(sobol),.ismo.samples.Sobol)
+        self.assertEqual(type(sobol),ismo.samples.Sobol)
 
     def test_first_samples_start(self):
-        sobol =.ismo.samples.create_sample_generator('sobol')
+        sobol =ismo.samples.create_sample_generator('sobol')
 
         dimension = 4
         M = 8

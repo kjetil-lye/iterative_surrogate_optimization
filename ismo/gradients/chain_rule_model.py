@@ -1,4 +1,4 @@
-from.ismo.gradients import TensorGradient
+from ismo.gradients import TensorGradient
 import numpy as np
 
 
