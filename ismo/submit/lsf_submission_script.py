@@ -33,7 +33,7 @@ class LsfSubmissionScript(SubmissionScript):
             submit_command.extend(['-J', '{}'.format(self.job_chain)])
 
         if not self.first_time_job_chain:
-            submit_command.extend(['-w', '"done({})"'.format(self.job_chain)])
+            submit_command.extend(['-w', 'done({})'.format(self.job_chain)])
 
         self.first_time_job_chain = False
 
