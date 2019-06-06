@@ -6,5 +6,6 @@
   "epochs" : 50000,
   "should_use_early_stopping" : true,
   "learning_rate" : 0.001,
-  "early_stopping_patience" : 50
+  "early_stopping_patience" : 50,
+  "retrainings" : 5
 }
