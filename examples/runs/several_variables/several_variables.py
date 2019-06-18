@@ -8,19 +8,35 @@ import ismo.samples.sample_generator_factory
 import ismo.optimizers
 import matplotlib.pyplot as plt
 
-class Objective:
+def evolve(parameters):
+    values = np.zeros((parameters.shape[0], 3))
+
+    for k in range(parameters.shape[0]):
+        values[k, 0] = np.sin(parameters[k, 2] + parameters[k, 0])
+        values[k, 1] = np.cos(parameters[k, 19] + parameters[k, 5])
+        values[k, 2] = np.tan(parameters[k, 4] + parameters[k, 8])
+
+    return values
+
+
+class Objective(object):
+    def __init__(self, sin_penalty=10, cos_penalty=10, tan_penalty=10):
+        self.sin_penalty = sin_penalty
+        self.cos_penalty = cos_penalty
+        self.tan_penalty = tan_penalty
+
     def __call__(self, x):
-        return x
+        return self.sin_penalty * x[0] ** 2 + self.cos_penalty * x[1] + self.tan_penalty * x[2]
 
     def grad(self, x):
-        return np.ones_like(x)
+        return np.array([2 * x[0], 1, 1])
 
 
 if __name__ == '__main__':
     import argparse
 
     parser = argparse.ArgumentParser(description="""
-Runs the function sin(4*pi*x) on the input parameters
+A multiple variable function (does not have any real use, just tests that we can do multiple variables)
         """)
 
     parser.add_argument('--number_of_samples_per_iteration', type=int, nargs='+', default=[16, 4, 4, 4, 4, 4],
@@ -53,16 +69,16 @@ Runs the function sin(4*pi*x) on the input parameters
         optimizer = ismo.optimizers.create_optimizer(args.optimizer)
 
         trainer = ismo.train.MultiVariateTrainer(
-            [ismo.train.create_trainer_from_simple_file(args.simple_configuration_file)])
+            [ismo.train.create_trainer_from_simple_file(args.simple_configuration_file) for k in range(3)])
 
         parameters, values = ismo.iterative_surrogate_model_optimization(
             number_of_samples_per_iteration=args.number_of_samples_per_iteration,
             sample_generator=generator,
             trainer=trainer,
             optimizer=optimizer,
-            simulator=lambda x: np.sin(4 * np.pi * x),
+            simulator=evolve,
             objective_function=Objective(),
-            dimension=1,
+            dimension=20,
             starting_sample=try_number*sum(args.number_of_samples_per_iteration))
 
 
