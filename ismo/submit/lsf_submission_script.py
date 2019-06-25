@@ -27,7 +27,7 @@ class LsfSubmissionScript(SubmissionScript):
             submit_command.append("{}:00".format(int(wait_time_in_hours)))
 
         if memory_limit_in_mb is not None:
-            submit_command.extend(["-R", "'rusage[mem={}]'".format(int(memory_limit_in_mb))])
+            submit_command.extend(["-R", "rusage[mem={}]".format(int(memory_limit_in_mb))])
 
         if self.job_chain is not None:
             submit_command.extend(['-J', '{}'.format(self.job_chain)])
