@@ -32,10 +32,10 @@ class LsfSubmissionScript(SubmissionScript):
         if self.job_chain is not None:
             submit_command.extend(['-J', '{}'.format(self.job_chain)])
 
-        if not self.first_time_job_chain:
-            submit_command.extend(['-w', 'done({})'.format(self.job_chain)])
+            if not self.first_time_job_chain:
+                submit_command.extend(['-w', 'done({})'.format(self.job_chain)])
 
-        self.first_time_job_chain = False
+            self.first_time_job_chain = False
 
         submit_command.extend(command.tolist())
         self.command_runner(submit_command)
