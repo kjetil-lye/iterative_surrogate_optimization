@@ -4,6 +4,9 @@ import h5py
 import keras.callbacks
 import copy
 import numpy as np
+import keras.initializers
+
+import keras.backend
 
 
 class SimpleTrainer(object):
@@ -57,13 +60,20 @@ class SimpleTrainer(object):
         self.model.save(outputname)
 
     def __reinitialize(self, model):
-        weights = model.get_weights()
-        weights_new = []
+        # See https://stackoverflow.com/a/51727616 (with some modifications, does not run out of the box)
+        session = keras.backend.get_session()
+        for layer in model.layers:
+            weights = np.zeros_like(layer.get_weights()[0])
+            biases = np.zeros_like(layer.get_weights()[1])
 
-        for array in weights:
-            weights_new.append(np.random.uniform(0, 1, array.shape))
+            if hasattr(layer, 'kernel_initializer'):
+                weights = session.run(layer.kernel_initializer(weights.shape))
 
-        model.set_weights(weights_new)
+            if hasattr(layer, 'bias_initializer'):
+                biases = session.run(layer.bias_initializer(biases.shape))
+
+
+            layer.set_weights((weights, biases))
 
         model.compile(optimizer=ismo.train.optimizers.create_optimizer(self.optimizer,
                                                                        self.learning_rate),
