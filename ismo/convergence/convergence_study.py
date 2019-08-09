@@ -124,7 +124,7 @@ def convergence_study(
 
                 competitor_min_values['objective'][try_number, iteration_number] = objective_values[arg_min]
 
-                for n, name in enumerate(['lift', 'drag', 'area']):
+                for n, name in enumerate(variable_names):
                     competitor_min_values[name][try_number, iteration_number] = values[arg_min, n]
 
                 if save_result:
