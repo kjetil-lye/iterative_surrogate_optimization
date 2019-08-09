@@ -78,7 +78,7 @@ def convergence_study(
             per_iteration['objective'].append(objective_values[arg_min])
 
         for func_name, func_values in per_iteration.items():
-            all_values_min[func_name].append(per_iteration)
+            all_values_min[func_name].append(per_iteration[func_name])
 
         if save_result:
             np.savetxt(f'{prefix}parameters_{try_number}_samples_{samples_as_str}.txt', parameters)
@@ -142,12 +142,12 @@ def convergence_study(
     iterations = np.arange(0, len(number_of_samples_per_iteration))
     for name, values in all_values_min.items():
         plt.errorbar(iterations, np.mean(values, 0),
-                     yerr=np.std(values, 0), fmt='o',
+                     yerr=np.std(values, 0).flatten(), fmt='o',
                      label='ISMO')
 
         if with_competitor:
             plt.errorbar(iterations[:-1], np.mean(competitor_min_values[name], 0),
-                         yerr=np.std(competitor_min_values[name], 0), fmt='*',
+                         yerr=np.std(competitor_min_values[name], 0).flatten(), fmt='*',
                          label='DNN+Opt')
         plt.legend()
         plt.xlabel('Iteration')
@@ -155,3 +155,4 @@ def convergence_study(
         plt.title(name)
 
         save_plot(f'{prefix}optimized_value_{name}_{samples_as_str}')
+        plt.close('all')
