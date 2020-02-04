@@ -19,6 +19,4 @@ class TensorGradient(object):
             predictions = self.model(x)
         evaluated_gradients = tape.gradient(predictions, x)
 
-        #evaluated_gradients = self.sess.run(self.gradients[0], feed_dict={self.model.input: x})
-
         return keras.backend.eval(evaluated_gradients)
