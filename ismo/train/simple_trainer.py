@@ -6,9 +6,6 @@ import copy
 import numpy as np
 import keras.initializers
 
-import tensorflow.compat.v1.keras.backend as K
-
-
 class SimpleTrainer(object):
 
     def __init__(self, *, training_parameters: Parameters,
@@ -61,17 +58,15 @@ class SimpleTrainer(object):
 
     def __reinitialize(self, model):
         # See https://stackoverflow.com/a/51727616 (with some modifications, does not run out of the box)
-        session = K.get_session()
         for layer in model.layers:
             weights = np.zeros_like(layer.get_weights()[0])
             biases = np.zeros_like(layer.get_weights()[1])
 
             if hasattr(layer, 'kernel_initializer'):
-                weights = session.run(layer.kernel_initializer(weights.shape))
+                weights = layer.kernel_initializer(weights.shape)
 
             if hasattr(layer, 'bias_initializer'):
-                biases = session.run(layer.bias_initializer(biases.shape))
-
+                biases = layer.bias_initializer(biases.shape)
 
             layer.set_weights((weights, biases))
 
