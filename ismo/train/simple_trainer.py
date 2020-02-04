@@ -6,7 +6,7 @@ import copy
 import numpy as np
 import keras.initializers
 
-import tensorflow.python.keras.backend as K
+import tf.compat.v1.keras.backend as K
 
 
 class SimpleTrainer(object):

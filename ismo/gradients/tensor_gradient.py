@@ -1,4 +1,4 @@
-import tensorflow.python.keras.backend as K
+import tf.compat.v1.keras.backend as K
 
 
 class TensorGradient(object):
