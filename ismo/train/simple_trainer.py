@@ -6,7 +6,7 @@ import copy
 import numpy as np
 import keras.initializers
 
-import keras.backend
+import tensorflow.python.keras.backend as K
 
 
 class SimpleTrainer(object):
@@ -61,7 +61,7 @@ class SimpleTrainer(object):
 
     def __reinitialize(self, model):
         # See https://stackoverflow.com/a/51727616 (with some modifications, does not run out of the box)
-        session = keras.backend.get_session()
+        session = K.get_session()
         for layer in model.layers:
             weights = np.zeros_like(layer.get_weights()[0])
             biases = np.zeros_like(layer.get_weights()[1])
