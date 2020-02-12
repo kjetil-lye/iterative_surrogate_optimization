@@ -1,7 +1,11 @@
 import ismo.submit
 import subprocess
 
-def create_submitter(name, job_chain, dry_run=False):
+def create_submitter(name, job_chain, dry_run=False, container_type=None,
+                     container='docker://kjetilly/machine_learning_base:0.1.1'):
+    if container is not None:
+
+
     if not dry_run:
         command_runner = lambda submit_command: subprocess.run(submit_command, check=True)
     else:

@@ -4,3 +4,4 @@ from .lsf_submission_script import LsfSubmissionScript
 from .bash_submission_script import BashSubmissionScript
 from .chain import Chain
 from .submitter_factory import create_submitter
+from .container import Container
