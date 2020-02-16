@@ -1,6 +1,6 @@
-import ismo.submit
+from ismo.submit import Command
 
-class Container(ismo.submit.Command):
+class Container(Command):
     def __init__(self, command):
         self.command = command
 
