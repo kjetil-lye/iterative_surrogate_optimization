@@ -1,4 +1,4 @@
-from ismo.submit import Container, Command
+from ismo.submit import Container, Command, get_user_id, get_group_id
 import os
 import sys
 
@@ -17,7 +17,7 @@ class Docker(Container):
                   'run',
                   # user
                   '-u',
-                  
+                  f'{get_user_id()}:{get_group_id()}',
                   # Python environment
                   '-e',
                   'PYTHONPATH=' + ':'.join(sys.path),

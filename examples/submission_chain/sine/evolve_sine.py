@@ -18,5 +18,4 @@ Runs the function sin(4*pi*x) on the input parameters
     parameters = np.loadtxt(args.input_parameters_file)
 
     values = np.sin(4 * np.pi * parameters)
-
     np.savetxt(args.output_values_file, values)

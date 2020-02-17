@@ -1,5 +1,6 @@
 from .current_repository import get_current_repository
 from .command import Command
+from .user_group_id import get_group_id, get_user_id
 from .submission_script import SubmissionScript
 from .lsf_submission_script import LsfSubmissionScript
 from .bash_submission_script import BashSubmissionScript
