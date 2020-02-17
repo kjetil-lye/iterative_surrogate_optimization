@@ -16,6 +16,10 @@ def create_submitter(name, job_chain, dry_run=False, container_type=None,
 
     if name.lower() == 'lsf':
         submitter = ismo.submit.LsfSubmissionScript(job_chain, command_runner=command_runner)
+
+        if container_type == 'singularity':
+            submitter.add_parameter(['-R', 'singularity'])
+
     elif name.lower() == 'bash':
         submitter = ismo.submit.BashSubmissionScript(job_chain, command_runner=command_runner)
     else:
@@ -25,6 +29,8 @@ def create_submitter(name, job_chain, dry_run=False, container_type=None,
         if container_type == 'docker':
             container_class = ismo.submit.Docker
             container = container.replace('docker://', '')
+        elif container_type == 'singularity':
+            container_class = ismo.submit.Singularity
         else:
             raise Exception(f"Unknown container {container_type}.")
 

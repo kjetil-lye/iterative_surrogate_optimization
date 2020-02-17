@@ -14,6 +14,11 @@ class LsfSubmissionScript(SubmissionScript):
 
         self.command_runner = command_runner
 
+        self.parameters = []
+
+    def add_parameter(self, parameter: list):
+        self.parameters.extend(parameter)
+
     def __call__(self, command : Command,
                  *,
                  number_of_processes=1,
@@ -36,6 +41,8 @@ class LsfSubmissionScript(SubmissionScript):
                 submit_command.extend(['-w', 'done({})'.format(self.job_chain)])
 
             self.first_time_job_chain = False
+
+        submit_command.extend(self.parameters)
 
         submit_command.extend(command.tolist())
         self.command_runner(submit_command)

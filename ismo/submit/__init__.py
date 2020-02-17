@@ -8,5 +8,6 @@ from .chain import Chain
 from .submitter_factory import create_submitter
 from .container import Container
 from .docker import Docker
+from .singularity import Singularity
 from .container_decorator import ContainerDecorator
 
