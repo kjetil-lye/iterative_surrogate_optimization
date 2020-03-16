@@ -1,7 +1,7 @@
 import unittest
-from keras.models import Model
-from keras.layers import Input, Dense
-import keras.backend
+from tensorflow.keras.models import Model
+from tensorflow.keras.layers import Input, Dense
+import tensorflow.keras.backend
 import numpy as np
 
 from  ismo.gradients import TensorGradient

@@ -1,10 +1,10 @@
 import tensorflow.compat.v1.keras.backend as K
 import tensorflow
-import keras.backend
+import tensorflow.keras.backend
 
 class TensorGradient(object):
     def __init__(self, model):
-        # See https://stackoverflow.com/questions/54566337/how-to-get-gradient-values-using-keras-backend-gradients
+        # See https://stackoverflow.com/questions/54566337/how-to-get-gradient-values-using-tensorflow.keras-backend-gradients
         #self.gradients = K.gradients(model.output, model.input)
         #self.sess = K.get_session()
         self.model = model
@@ -19,4 +19,4 @@ class TensorGradient(object):
             predictions = self.model(x)
         evaluated_gradients = tape.gradient(predictions, x)
 
-        return keras.backend.eval(evaluated_gradients)
+        return tensorflow.keras.backend.eval(evaluated_gradients)

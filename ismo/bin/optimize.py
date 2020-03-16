@@ -3,7 +3,7 @@
 import json
 import ismo.optimizers
 import ismo.objective_function
-import keras.models
+import tensorflow.keras.models
 
 if __name__ == '__main__':
     import argparse
@@ -45,7 +45,7 @@ parameter_sample_1
 
     args = parser.parse_args()
 
-    models = [keras.models.load_model(filename) for filename in args.input_model_files]
+    models = [tensorflow.keras.models.load_model(filename) for filename in args.input_model_files]
 
     starting_values = np.loadtxt(args.input_parameters_file)
 

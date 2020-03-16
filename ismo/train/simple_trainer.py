@@ -1,10 +1,10 @@
 from ismo.train import Parameters
 import ismo.train.optimizers
 import h5py
-import keras.callbacks
+import tensorflow.keras.callbacks
 import copy
 import numpy as np
-import keras.initializers
+import tensorflow.keras.initializers
 
 class SimpleTrainer(object):
 
@@ -25,7 +25,7 @@ class SimpleTrainer(object):
         self.callbacks = []
         if training_parameters.should_use_early_stopping:
             self.callbacks.append(
-                keras.callbacks.EarlyStopping(monitor='loss', patience=training_parameters.early_stopping_patience))
+                tensorflow.keras.callbacks.EarlyStopping(monitor='loss', patience=training_parameters.early_stopping_patience))
 
         self.writers = []
 
@@ -39,8 +39,8 @@ class SimpleTrainer(object):
 
             loss = hist.history['loss'][-1]
             if best_loss is None or loss < best_loss:
-                best_weights = copy.deepcopy(self.model.get_weights())
-                best_loss_hist = copy.deepcopy(hist)
+                best_weights = copy.copy(self.model.get_weights())
+                best_loss_hist = copy.copy(hist)
 
         self.model.set_weights(best_weights)
 
