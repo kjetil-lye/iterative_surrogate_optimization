@@ -88,10 +88,14 @@ class Commands(object):
         command = self.__run_python_module("ismo.bin.train")
 
         for value_number in range(self.number_of_output_values):
-            input_parameters_files = [self.parameter_basename.format(i) for i in range(iteration_number + 1)]
-            input_values_files = [self.values_basename.format(iteration_number=i,
-                                                              value_number=value_number) for i in
-                                  range(iteration_number + 1)]
+            if not self.output_append:
+                input_parameters_files = [self.parameter_basename.format(i) for i in range(iteration_number + 1)]
+                input_values_files = [self.values_basename.format(iteration_number=i,
+                                                                  value_number=value_number) for i in
+                                      range(iteration_number + 1)]
+            else:
+                input_parameters_files = [self.parameter_basename]
+                input_values_files = [self.values_basename.format(value_number=value_number)]
 
             output_model_file = self.model_file_basename.format(iteration_number=iteration_number,
                                                                 value_number=value_number)
