@@ -1,5 +1,5 @@
 #!/bin/env python
-
+import os.path
 
 if __name__ == '__main__':
     import argparse
@@ -28,18 +28,26 @@ Example use would be:
     parser.add_argument('--output_file', type=str, required=True,
                         help='Output filename (full path)')
 
+    parser.add_argument('--output_append', action='store_true',
+                        help='Append output to end of file')
+
     args = parser.parse_args()
-
-
 
     generator = create_sample_generator(args.generator)
 
     samples = generator(args.number_of_samples,
                         args.dimension,
-                        start = args.start)
+                        start=args.start)
 
+    if args.output_append:
+        if os.path.exists(args.output_file):
+            previous_samples = np.loadtxt(args.output_file)
+
+            new_samples = np.zeros((samples.shape[0] + previous_samples.shape[0], args.dimension))
+
+            new_samples[:previous_samples.shape[0], :] = previous_samples
+            new_samples[previous_samples.shape[0]:, :] = samples
+
+            samples = new_samples
 
     np.savetxt(args.output_file, samples)
-
-
-

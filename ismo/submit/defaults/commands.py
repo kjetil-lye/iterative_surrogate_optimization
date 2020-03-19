@@ -20,15 +20,28 @@ class Commands(object):
                  optimization_parameter_file=None,
                  optimizer_name='L-BFGS-B',
                  objective_parameter_file=None,
-                 sample_generator_name='monte-carlo'
+                 sample_generator_name='monte-carlo',
+                 output_append=False,
+                 reuse_model=False
                  ):
         self.prefix = prefix
 
-        self.parameter_for_optimization_basename = prefix + 'parameters_for_optimization_{}.txt'
-        self.parameter_basename = prefix + 'parameters_{}.txt'
-        self.model_file_basename = prefix + 'model_{iteration_number}_{value_number}.h5'
-        self.values_basename = prefix + 'values_{iteration_number}_{value_number}.txt'
-        self.objective_basename = prefix + 'objective_{}.txt'
+        self.output_append = output_append
+        self.reuse_model = reuse_model
+
+        if not self.output_append:
+            self.parameter_for_optimization_basename = prefix + 'parameters_for_optimization_{}.txt'
+            self.parameter_basename = prefix + 'parameters_{}.txt'
+            self.model_file_basename = prefix + 'model_{iteration_number}_{value_number}.h5'
+            self.values_basename = prefix + 'values_{iteration_number}_{value_number}.txt'
+            self.objective_basename = prefix + 'objective_{}.txt'
+
+        else:
+            self.parameter_for_optimization_basename = prefix + 'parameters.txt'
+            self.parameter_basename = prefix + 'parameters.txt'
+            self.model_file_basename = prefix + 'model_{value_number}.h5'
+            self.values_basename = prefix + 'values_{value_number}.txt'
+            self.objective_basename = prefix + 'objective.txt'
 
         self.python_command = python_command
         self.training_parameter_config_file = training_parameter_config_file
@@ -43,6 +56,7 @@ class Commands(object):
         self.dimension = dimension
 
         self.number_of_samples_generated = starting_sample
+        self.number_of_generated_samples_in_last_batch = 0
 
         self.additional_optimizer_arguments = {'optimizer_name': optimizer_name}
 
@@ -55,6 +69,17 @@ class Commands(object):
             self.additional_objective_arguments['objective_parameter_file'] = objective_parameter_file
 
         self.sample_generator_name = sample_generator_name
+
+    def add_start_end_values(self, command):
+        if not self.output_append:
+            return command
+
+        start = self.number_of_samples_generated - self.number_of_generated_samples_in_last_batch
+        end = self.number_of_samples_generated
+        command = command.with_long_arguments(start=start, end=end)
+
+        command = command.with_boolean_argument('output_append')
+        return command.with_long_arguments(start=start, end=end)
 
     def __run_python_module(self, module):
         return Command([self.python_command, "-m", module])
@@ -77,9 +102,13 @@ class Commands(object):
                 simple_configuration_file=self.training_parameter_config_file,
                 output_model_file=output_model_file
             )
+            if self.reuse_model:
+                command = command.with_boolean_argument('reuse_model')
+
             submitter(command, wait_time_in_hours=self.training_wait_time_in_hours)
 
     def generate_samples(self, submitter, iteration_number, *, number_of_samples):
+
         command = self.__run_python_module("ismo.bin.generate_samples")
         if iteration_number == 0:
             output_parameters_file = self.parameter_basename.format(iteration_number)
@@ -91,10 +120,13 @@ class Commands(object):
                                               dimension=self.dimension,
                                               start=self.number_of_samples_generated,
                                               generator=self.sample_generator_name)
+        if self.output_append:
+            command = command.with_boolean_argument('output_append')
 
         submitter(command)
 
         self.number_of_samples_generated += number_of_samples
+        self.number_of_generated_samples_in_last_batch = number_of_samples
 
     def optimize(self, submitter, iteration_number):
         command = self.__run_python_module("ismo.bin.optimize")
@@ -114,6 +146,7 @@ class Commands(object):
                                               **self.additional_optimizer_arguments,
                                               **self.additional_objective_arguments)
 
+        command = self.add_start_end_values(command)
         submitter(command, wait_time_in_hours=self.optimize_wait_time_in_hours)
 
     def evolve(self, submitter, iteration_number):

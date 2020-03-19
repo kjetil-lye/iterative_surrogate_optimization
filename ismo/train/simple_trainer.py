@@ -29,6 +29,9 @@ class SimpleTrainer(object):
 
         self.writers = []
 
+    def load_from_file(self, filename):
+        self.model.load_weights(filename)
+
     def fit(self, parameters, values):
         best_loss = None
         for retraining_number in range(self.retrainings):

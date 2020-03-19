@@ -1,4 +1,3 @@
-
 from ismo.submit import SubmissionScript
 from ismo.submit.defaults import Commands
 
@@ -9,7 +8,6 @@ class Chain(object):
                  *,
                  commands: Commands
                  ):
-
         self.number_of_samples_per_iteration = number_of_samples_per_iteration
 
         self.__commands = commands
@@ -29,13 +27,12 @@ class Chain(object):
         self.__commands.optimize(self.submitter, iteration_number)
 
     def run(self):
-        self.generate_samples(0, number_of_samples = self.number_of_samples_per_iteration[0])
+        self.generate_samples(0, number_of_samples=self.number_of_samples_per_iteration[0])
 
         self.evolve(0)
 
         for n, number_of_samples in enumerate(self.number_of_samples_per_iteration[1:]):
             self.train(n)
-            self.generate_samples(n+1, number_of_samples = number_of_samples)
-            self.optimize(n+1)
-            self.evolve(n+1)
-
+            self.generate_samples(n + 1, number_of_samples=number_of_samples)
+            self.optimize(n + 1)
+            self.evolve(n + 1)

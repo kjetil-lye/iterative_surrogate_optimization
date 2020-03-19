@@ -4,6 +4,7 @@ import json
 import ismo.optimizers
 import ismo.objective_function
 import tensorflow.keras.models
+import os.path
 
 if __name__ == '__main__':
     import argparse
@@ -43,11 +44,23 @@ parameter_sample_1
     parser.add_argument('--objective_parameter_file', type=str,
                         help='Parameter file the optimization')
 
+    parser.add_argument('--start', type=int, default=0,
+                        help='Starting index to read out of the parameter file, by default reads from start of file')
+
+    parser.add_argument('--end', type=int, default=-1,
+                        help='Ending index (exclusive) to read out of the parameter file, by default reads to end of file')
+
+    parser.add_argument('--output_append', action='store_true',
+                        help='Append output to end of file')
+
     args = parser.parse_args()
 
     models = [tensorflow.keras.models.load_model(filename) for filename in args.input_model_files]
 
-    starting_values = np.loadtxt(args.input_parameters_file)
+    if args.end != -1:
+        starting_values = np.loadtxt(args.input_parameters_file)[args.start:args.end]
+    else:
+        starting_values = np.loadtxt(args.input_parameters_file)[args.start:]
 
     if args.optimization_parameter_file:
         with open (args.optimization_parameter_file) as config_file:
@@ -75,4 +88,21 @@ parameter_sample_1
         J=objective_function_dnn,
         optimizer=optimizer)
 
+    if args.output_append:
+        if os.path.exists(args.output_parameters_file):
+            if os.path.abspath(args.output_parameters_file) != os.path.abspath(args.input_parameters_file):
+                raise Exception(f"When running with '--output_append', "
+                                f"--output_parameters_file and --input_parameters_file need to be the same file, "
+                                f"given {args.output_parameters_file} and {args.input_parameters_file}.")
+
+            previous_optimized_parameters = np.loadtxt(args.output_parameters_file)
+
+            # Notice here we are *not* adding new samples, we are simply transforming the old ones.
+            new_optimized_parameters = np.zeros_like(previous_optimized_parameters)
+
+            starting_index = previous_optimized_parameters.shape[0] - optimized_parameters.shape[0]
+            new_optimized_parameters[:starting_index, :] = previous_optimized_parameters[:starting_index,:]
+            new_optimized_parameters[starting_index:, :] = optimized_parameters
+
+            optimized_parameters = new_optimized_parameters
     np.savetxt(args.output_parameters_file, optimized_parameters)

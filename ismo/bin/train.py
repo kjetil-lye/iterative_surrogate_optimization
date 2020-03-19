@@ -1,6 +1,7 @@
 #!/bin/env python
 
 import ismo.train
+import os.path
 
 if __name__ == '__main__':
     import argparse
@@ -35,6 +36,10 @@ value_sample_1
     parser.add_argument('--simple_configuration_file', type=str, required=True,
                         help='A JSON file describing the configuration file')
 
+    parser.add_argument('--reuse_model', action='store_true',
+                        help='Reuse the model')
+
+
     args = parser.parse_args()
 
     if len(args.input_parameters_files) != len(args.input_values_files):
@@ -64,6 +69,9 @@ value_sample_1
                 all_parameters[-parameters.shape[0]:, :] = parameters
             all_values = np.resize(all_values, (all_values.shape[0] + values.shape[0]))
             all_values[-values.shape[0]:] = values
+
+    if args.reuse_model and os.path.exists(args.output_model_file):
+        trainer.load_from_file(args.output_model_file)
 
     trainer.fit(all_parameters, all_values)
 

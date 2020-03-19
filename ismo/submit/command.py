@@ -17,5 +17,15 @@ class Command(object):
 
         return Command(command_list)
 
+    def with_boolean_argument(self, argument_names):
+        if type(argument_names) == str:
+            argument_names = [argument_names]
+
+        new_command = copy.deepcopy(self.command)
+        for argument_name in argument_names:
+            new_command.append(f'--{argument_name}')
+
+        return Command(new_command)
+
     def tolist(self):
         return self.command
