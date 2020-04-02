@@ -79,7 +79,7 @@ class Commands(object):
         command = command.with_long_arguments(start=start, end=end)
 
         command = command.with_boolean_argument('output_append')
-        return command.with_long_arguments(start=start, end=end)
+        return command
 
     def __run_python_module(self, module):
         return Command([self.python_command, "-m", module])
