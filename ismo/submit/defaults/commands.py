@@ -55,6 +55,7 @@ class Commands(object):
         self.number_of_output_values = number_of_output_values
         self.dimension = dimension
 
+        self.starting_sample = starting_sample
         self.number_of_samples_generated = starting_sample
         self.number_of_generated_samples_in_last_batch = 0
 
@@ -74,8 +75,8 @@ class Commands(object):
         if not self.output_append:
             return command
 
-        start = self.number_of_samples_generated - self.number_of_generated_samples_in_last_batch
-        end = self.number_of_samples_generated
+        start = self.number_of_samples_generated - self.number_of_generated_samples_in_last_batch - self.starting_sample
+        end = self.number_of_samples_generated - self.starting_sample
         command = command.with_long_arguments(start=start, end=end)
 
         command = command.with_boolean_argument('output_append')
