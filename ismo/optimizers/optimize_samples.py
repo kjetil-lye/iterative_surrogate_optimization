@@ -24,14 +24,16 @@ def optimize_samples(*,
 
     optimized_parameters = []
 
+    optimization_results = []
     for starting_value in starting_values:
-        x, y = optimizer(F = J,
+        x, y, results = optimizer(F = J,
                          DF = lambda x: J.grad(x),
                          x0 = starting_value,
                          bounds = make_bounds(bounds, starting_value))
+        optimization_results.append(results)
         optimized_parameters.append(x)
 
-    return np.array(optimized_parameters)
+    return np.array(optimized_parameters), optimization_results
 
 
 

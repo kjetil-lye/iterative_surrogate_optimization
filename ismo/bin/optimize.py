@@ -5,6 +5,7 @@ import ismo.optimizers
 import ismo.objective_function
 import tensorflow.keras.models
 import os.path
+import pickle
 
 if __name__ == '__main__':
     import argparse
@@ -53,6 +54,11 @@ parameter_sample_1
     parser.add_argument('--output_append', action='store_true',
                         help='Append output to end of file')
 
+    parser.add_argument('--optimization_result_filename', type=str, default=None,
+                        help='Where one should save the results.')
+
+
+
     args = parser.parse_args()
 
     models = [tensorflow.keras.models.load_model(filename) for filename in args.input_model_files]
@@ -83,10 +89,21 @@ parameter_sample_1
 
     optimizer = ismo.optimizers.create_optimizer(args.optimizer_name)
 
-    optimized_parameters = ismo.optimizers.optimize_samples(
+    optimized_parameters, optimization_results = ismo.optimizers.optimize_samples(
         starting_values=starting_values,
         J=objective_function_dnn,
         optimizer=optimizer)
+
+    if args.optimization_result_filename is not None:
+        if os.path.exists(args.optimization_result_filename):
+            with open(args.optimization_result_filename, 'rb') as input_results_file:
+                previous_optimization_results = pickle.load(input_results_file)
+                optimization_results = previous_optimization_results + optimization_results
+
+        with open(args.optimization_result_filename, 'wb') as output_results_file:
+            pickle.dump(optimization_results, output_results_file)
+
+
 
     if args.output_append:
         if os.path.exists(args.output_parameters_file):
