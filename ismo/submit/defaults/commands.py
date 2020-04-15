@@ -22,7 +22,8 @@ class Commands(object):
                  objective_parameter_file=None,
                  sample_generator_name='monte-carlo',
                  output_append=False,
-                 reuse_model=False
+                 reuse_model=False,
+                 optimization_results_filename = None
                  ):
         self.prefix = prefix
 
@@ -70,6 +71,8 @@ class Commands(object):
             self.additional_objective_arguments['objective_parameter_file'] = objective_parameter_file
 
         self.sample_generator_name = sample_generator_name
+
+        self.optimization_results_filename = optimization_results_filename
 
     def add_start_end_values(self, command):
         if not self.output_append:
@@ -150,6 +153,9 @@ class Commands(object):
                                               input_parameters_file=input_parameters_file,
                                               **self.additional_optimizer_arguments,
                                               **self.additional_objective_arguments)
+
+        if self.optimization_results_filename is not None:
+            command = command.with_long_arguments(optimization_result_filename=self.optimization_results_filename)
 
         command = self.add_start_end_values(command)
         submitter(command, wait_time_in_hours=self.optimize_wait_time_in_hours)

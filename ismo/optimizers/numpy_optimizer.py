@@ -10,4 +10,4 @@ class NumpyOptimizer(object):
 
         y = F(optimization_result.x)
 
-        return optimization_result.x, y
+        return optimization_result.x, y, optimization_result
