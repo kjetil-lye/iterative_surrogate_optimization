@@ -151,4 +151,6 @@ def run_all_configurations(*, script_name, source_folder, basename, number_of_re
                               container_type=container_type,
                               container=container,
                               sample_generator=generator,
-                              optimizer=optimizer)
+                              optimizer=optimizer,
+                              script_name=script_name,
+                              source_folder=source_folder)
