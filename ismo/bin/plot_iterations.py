@@ -31,6 +31,8 @@ if __name__ == '__main__':
     if args.aux_names is not None:
         with open(args.aux_names) as f:
             aux_files = json.load(f)
+    else:
+        aux_files = {}
 
     with open('ensemble_setup.json') as f:
         configuration = json.load(f)
