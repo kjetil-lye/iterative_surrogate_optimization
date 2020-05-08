@@ -35,7 +35,7 @@ if __name__ == '__main__':
     with open('ensemble_setup.json') as f:
         configuration = json.load(f)
 
-    python_script = configuration['python_script']
+    python_script = configuration['script_name']
     compute_budget = configuration['compute_budget']
     source_folder = configuration['source_folder']
 
