@@ -114,6 +114,10 @@ parameter_sample_1
 
             previous_optimized_parameters = np.loadtxt(args.output_parameters_file)
 
+            if len(previous_optimized_parameters.shape) == 1:
+                # In case of a 1D array, we need to make sure to treat is a two-dim array.
+                previous_optimized_parameters = previous_optimized_parameters.reshape((previous_optimized_parameters.shape[0], 1))
+
             # Notice here we are *not* adding new samples, we are simply transforming the old ones.
             new_optimized_parameters = np.zeros_like(previous_optimized_parameters)
 

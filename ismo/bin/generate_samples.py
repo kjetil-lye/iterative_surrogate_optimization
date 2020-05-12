@@ -43,6 +43,10 @@ Example use would be:
         if os.path.exists(args.output_file):
             previous_samples = np.loadtxt(args.output_file)
 
+            if len(previous_samples.shape) == 1:
+                # In case of a 1D array, we need to make sure to treat is a two-dim array.
+                previous_samples = previous_samples.reshape((previous_samples.shape[0], 1))
+
             new_samples = np.zeros((samples.shape[0] + previous_samples.shape[0], args.dimension))
 
             new_samples[:previous_samples.shape[0], :] = previous_samples
