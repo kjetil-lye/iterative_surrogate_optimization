@@ -31,7 +31,6 @@ def run_configuration(*, script_name, source_folder, basename, rerun, iteration_
                       submitter_name,
                       only_missing, container, container_type,
                       sample_generator, optimizer):
-    source_folder = os.path.basename(source_folder)
     starting_size = iteration_sizes[0]
     batch_size_factor = iteration_sizes[0] / iteration_sizes[1]
 
