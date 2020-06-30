@@ -288,4 +288,23 @@ if __name__ == '__main__':
                             batch_size=iterations[1],
                             starting_size=starting_size,
                             generator=generator))
+
+                        plt.plot(iteration_range, np.mean(source[0], 1), '-*',
+                                 label='Mean ISMO')
+
+
+                        plt.plot(iteration_range, np.mean(source[1], 1), '-*',
+                                 label='Mean DNN+Opt')
+
+                        plt.legend()
+
+                        plot_info.savePlot(
+                            "{script}_mean_percentile_{percentile}_{source_name}_{generator}_{batch_size}_{starting_size}".format(
+                                percentile=percentile,
+                                script=python_script.replace(".py", ""),
+                                source_name=source_name,
+                                batch_size=iterations[1],
+                                starting_size=starting_size,
+                                generator=generator))
+
                         plt.close('all')
