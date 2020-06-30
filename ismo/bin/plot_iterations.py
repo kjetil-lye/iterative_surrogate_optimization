@@ -41,6 +41,8 @@ if __name__ == '__main__':
     compute_budget = configuration['compute_budget']
     source_folder = configuration['source_folder']
 
+    percentiles = [68, 95, 99.7]
+
     for generator in [configuration['generator']]:
 
         for starting_size in configuration['starting_sizes']:
@@ -251,3 +253,38 @@ if __name__ == '__main__':
                         starting_size=starting_size,
                         generator=generator))
                     plt.close('all')
+
+                    plot_info.saveDate(f"ismo_{script}_source_name}_{generator}_{batch_size}_{starting_size}",
+                                       source[0])
+                    plot_info.saveDate(f"dnnopt_{script}_source_name}_{generator}_{batch_size}_{starting_size}",
+                                       source[1])
+                    ## percentiles
+                    for percentile in percentiles:
+
+
+                        plt.plot(iteration_range, np.percentile(source[0], percentile, axis=1), '-o',
+                                 label='ISMO')
+
+
+                        plt.plot(iteration_range, np.percentile(source[1], percentile, axis=1), '-o',
+                                 label='DNN+Opt')
+
+                        plt.xlabel("Iteration $k$")
+                        if source_name == "objective":
+                            plt.ylabel("$\\mathbb{E}( J(x_k^*))$")
+                        else:
+                            plt.ylabel(f"$\\mathrm{{{source_name}}}(x_k^*)$")
+
+                        plt.legend()
+                        plt.title(
+                            "percentile {}%, type: {}, script: {}, generator: {}, batch_size_factor: {},\nstarting_size: {}".format(
+                                percentile,
+                                source_name, python_script, generator, batch_size_factor, starting_size))
+                        plot_info.savePlot("{script}_percentile_{percentile}_{source_name}_{generator}_{batch_size}_{starting_size}".format(
+                            percentile=percentile,
+                            script=python_script.replace(".py", ""),
+                            source_name=source_name,
+                            batch_size=iterations[1],
+                            starting_size=starting_size,
+                            generator=generator))
+                        plt.close('all')
