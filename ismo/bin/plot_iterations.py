@@ -290,11 +290,11 @@ if __name__ == '__main__':
                             generator=generator))
 
                         plt.plot(iteration_range, np.mean(source[0], 1), '-*',
-                                 label='Mean ISMO')
+                                 label='Mean ISMO', color='C0')
 
 
                         plt.plot(iteration_range, np.mean(source[1], 1), '-*',
-                                 label='Mean DNN+Opt')
+                                 label='Mean DNN+Opt', color='C1')
 
                         plt.legend()
 
