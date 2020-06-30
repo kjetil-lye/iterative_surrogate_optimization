@@ -254,9 +254,9 @@ if __name__ == '__main__':
                         generator=generator))
                     plt.close('all')
 
-                    plot_info.saveDate(f"ismo_{script}_{source_name}_{generator}_{batch_size}_{starting_size}",
+                    plot_info.saveData(f"ismo_{script}_{source_name}_{generator}_{batch_size}_{starting_size}",
                                        source[0])
-                    plot_info.saveDate(f"dnnopt_{script}_{source_name}_{generator}_{batch_size}_{starting_size}",
+                    plot_info.saveData(f"dnnopt_{script}_{source_name}_{generator}_{batch_size}_{starting_size}",
                                        source[1])
                     ## percentiles
                     for percentile in percentiles:
