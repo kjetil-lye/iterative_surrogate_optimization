@@ -188,6 +188,7 @@ if __name__ == '__main__':
                     sources[aux_name] = [aux_min_values[aux_name], aux_min_values_competitor[aux_name]]
 
                 for source_name, source in sources.items():
+                    batch_size = iterations[1]
                     iteration_range = np.arange(0, len(iterations))
 
                     plt.errorbar(iteration_range, np.mean(source[0], 1),
