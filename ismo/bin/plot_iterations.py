@@ -96,7 +96,7 @@ if __name__ == '__main__':
                                 min_aux_value = np.loadtxt(output_aux)[arg_min_value]
 
                                 aux_min_values[aux_name][iteration, rerun] = min_aux_value
-                                aux_value_per_iteration[aux_name][:, rerun] = output_aux
+                                aux_value_per_iteration[aux_name][:, rerun] = np.loadtxt(output_aux)
 
 
 
