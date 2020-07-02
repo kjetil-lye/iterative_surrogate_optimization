@@ -111,12 +111,12 @@ if __name__ == '__main__':
                 aux_value_per_iteration["objective"] = value_per_iteration
                 aux_value_per_iteration["liftdrag"] = aux_value_per_iteration["lift"]/aux_value_per_iteration["drag"]
                 for source_name in aux_value_per_iteration.keys():
-                    min_objective_value = np.min(value_per_iteration[:, 0])
+                    min_objective_value = np.min(aux_value_per_iteration[source_name][:, 0])
 
                     if source_name == "objective":
                         max_objective_value = 2
                     else:
-                        max_objective_value = np.max(value_per_iteration[:, 0])
+                        max_objective_value = np.max(aux_value_per_iteration[source_name][:, 0])
                     for iteration in range(len(iterations)):
                         plt.hist(aux_value_per_iteration[source_name][sum(iterations[:iteration]):sum(iterations[:iteration+1]),0],
                                  bins=30, range=(min_objective_value, max_objective_value))
