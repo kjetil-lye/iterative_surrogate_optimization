@@ -104,7 +104,9 @@ if __name__ == '__main__':
 
                 # Histogram evolution
                 min_objective_value = np.min(value_per_iteration[:, 0])
-                max_objective_value = np.max(value_per_iteration[:, 0])
+
+                max_objective_value = 2 #np.max(value_per_iteration[:, 0])
+
                 for iteration in range(len(iterations)):
                     plt.hist(value_per_iteration[sum(iterations[:iteration]):sum(iterations[:iteration+1]),0],
                              bins=30, range=(min_objective_value, max_objective_value))
