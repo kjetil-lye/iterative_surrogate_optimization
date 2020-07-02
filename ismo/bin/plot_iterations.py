@@ -117,6 +117,7 @@ if __name__ == '__main__':
                         source_name="objective",
                         batch_size=iterations[1],
                         starting_size=starting_size,
+                        generator=generator,
                         iteration=iteration))
                     plt.close('all')
 
