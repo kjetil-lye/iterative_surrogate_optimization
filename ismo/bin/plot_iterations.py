@@ -58,6 +58,9 @@ if __name__ == '__main__':
                 min_value_per_iteration = np.zeros((len(iterations), number_of_reruns))
                 value_per_iteration = np.zeros((sum(iterations), number_of_reruns))
 
+                aux_value_per_iteration = collections.defaultdict(lambda: np.zeros((sum(iterations), number_of_reruns)))
+
+
                 aux_min_values = collections.defaultdict(lambda: np.zeros((len(iterations), number_of_reruns)))
 
                 min_shapes_per_iteration = []
@@ -93,6 +96,7 @@ if __name__ == '__main__':
                                 min_aux_value = np.loadtxt(output_aux)[arg_min_value]
 
                                 aux_min_values[aux_name][iteration, rerun] = min_aux_value
+                                aux_value_per_iteration[aux_name][:, rerun] = output_aux
 
 
 
@@ -103,25 +107,33 @@ if __name__ == '__main__':
                             print(f"Failing {batch_size_factor} {starting_size} {generator}")
 
                 # Histogram evolution
-                min_objective_value = np.min(value_per_iteration[:, 0])
 
-                max_objective_value = 2 #np.max(value_per_iteration[:, 0])
+                aux_value_per_iteration["objective"] = value_per_iteration
+                aux_value_per_iteration["liftdrag"] = aux_value_per_iteration["lift"]/aux_value_per_iteration["drag"]
+                for source_name in aux_value_per_iteration.keys():
+                    min_objective_value = np.min(value_per_iteration[:, 0])
 
-                for iteration in range(len(iterations)):
-                    plt.hist(value_per_iteration[sum(iterations[:iteration]):sum(iterations[:iteration+1]),0],
-                             bins=30, range=(min_objective_value, max_objective_value))
-                    plt.xlabel("Objective value")
-                    plt.ylabel("Number of samples")
-                    plt.title("iteration: {}, type: {}, script: {}, generator: {}, batch_size_factor: {},\nstarting_size: {}".format(
-                        iteration, "objective", python_script, generator, batch_size_factor, starting_size))
-                    plot_info.savePlot("evolution_hist_{script}_{source_name}_{generator}_{batch_size}_{starting_size}_{iteration}".format(
-                        script=python_script.replace(".py", ""),
-                        source_name="objective",
-                        batch_size=iterations[1],
-                        starting_size=starting_size,
-                        generator=generator,
-                        iteration=iteration))
-                    plt.close('all')
+                    if source_name == "objective":
+                        max_objective_value = 2
+                    else:
+                        max_objective_value = np.max(value_per_iteration[:, 0])
+                    for iteration in range(len(iterations)):
+                        plt.hist(aux_value_per_iteration[source_name][sum(iterations[:iteration]):sum(iterations[:iteration+1]),0],
+                                 bins=30, range=(min_objective_value, max_objective_value))
+                        plt.xlabel(f"{source_name} value")
+                        plt.ylabel("Number of samples")
+                        plt.title("iteration: {}, type: {}, script: {}, generator: {}, batch_size_factor: {},\nstarting_size: {}".format(
+                            iteration, source_name, python_script, generator, batch_size_factor, starting_size))
+                        plot_info.savePlot("evolution_hist_{script}_{source_name}_{generator}_{batch_size}_{starting_size}_{iteration}".format(
+                            script=python_script.replace(".py", ""),
+                            source_name=source_name,
+                            batch_size=iterations[1],
+                            starting_size=starting_size,
+                            generator=generator,
+                            iteration=iteration))
+                        plt.close('all')
+
+
 
 
                 for iteration in range(len(iterations)):
