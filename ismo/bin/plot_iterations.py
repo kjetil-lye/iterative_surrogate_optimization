@@ -354,7 +354,7 @@ if __name__ == '__main__':
                                 sample_mean = np.mean(sample)
                                 sample_standard_error = scipy.stats.sem(sample)
 
-                                confidence_interval = scipy.stats.t.interval(percentile,
+                                confidence_interval = scipy.stats.t.interval(percentile/100.,
                                                                              degrees_freedom,
                                                                              sample_mean,
                                                                              sample_standard_error)
