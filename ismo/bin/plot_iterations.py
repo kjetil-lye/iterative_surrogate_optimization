@@ -106,7 +106,7 @@ if __name__ == '__main__':
                 min_objective_value = np.min(value_per_iteration[:, 0])
                 max_objective_value = np.max(value_per_iteration[:, 0])
                 for iteration in range(len(iterations)):
-                    plt.hist(value_per_iteration[sum(iterations[:iteration]):sum(iterations[:iteration+1])],
+                    plt.hist(value_per_iteration[sum(iterations[:iteration]):sum(iterations[:iteration+1]),0],
                              bins=30, range=(min_objective_value, max_objective_value))
                     plt.xlabel("Objective value")
                     plt.ylabel("Number of samples")
