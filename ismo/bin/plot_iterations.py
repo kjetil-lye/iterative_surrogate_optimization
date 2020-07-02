@@ -308,3 +308,72 @@ if __name__ == '__main__':
                                 generator=generator))
 
                         plt.close('all')
+
+                        # Percentile confidence
+
+                        sources_names = ['ISMO', 'DNN+Opt']
+                        formats = ['o', '*']
+                        for source_index in range(2):
+                            upper_lower = np.zeros((2, source[source_index].shape[0]))
+                            upper_lower[0, :] = np.percentile(source[source_index], 100 - percentile, axis=1)
+                            upper_lower[1, :] = np.percentile(source[source_index], percentile, axis=1)
+
+
+
+
+                            plt.errorbar(iteration_range, np.mean(source[source_index], 1),
+                                     yerr=upper_lower, label=sources_names[source_index],
+                                     fmt=formats[source_index], uplims=True, lolims=True)
+
+                        plt.legend()
+                        plt.title(
+                            "percentile confidence {}%, type: {}, script: {}, generator: {}, batch_size_factor: {},\nstarting_size: {}".format(
+                                percentile,
+                                source_name, python_script, generator, batch_size_factor, starting_size))
+                        plot_info.savePlot(
+                            "{script}_confidence_percentile_{percentile}_{source_name}_{generator}_{batch_size}_{starting_size}".format(
+                                percentile=percentile,
+                                script=python_script.replace(".py", ""),
+                                source_name=source_name,
+                                batch_size=iterations[1],
+                                starting_size=starting_size,
+                                generator=generator))
+                        plt.close('all')
+
+
+                        ## T test interval, see https://kite.com/python/answers/how-to-compute-the-confidence-interval-of-a-sample-statistic-in-python
+                        ## for more information. This might not be the most accurate way of doing it though.
+                        for source_index in range(2):
+                            confidence_intervals = np.zeros((2, source[source_index].sourceshape[0]))
+
+                            for iteration in range(source[source_index].shape[0]):
+                                sample = source[source_index][iteration, :]
+                                degrees_freedom = source[source_index].shape[1]
+                                sample_mean = np.mean(sample)
+                                sample_standard_error = scipy.stats.sem(sample)
+
+                                confidence_interval = scipy.stats.t.interval(confidence_level,
+                                                                             degrees_freedom,
+                                                                             sample_mean,
+                                                                             sample_standard_error)
+
+                                confidence_intervals[0, iteration] = confidence_interval[0]
+                                confidence_intervals[1, iteration] = confidence_interval[1]
+
+                            plt.errorbar(iteration_range, np.mean(source[source_index], 1),
+                                        yerr=confidence_intervals, label=sources_names[source_index],
+                                        fmt=formats[source_index], uplims=True, lolims=True)
+                        plt.legend()
+                        plt.title(
+                            "student t test confidence {}%, type: {}, script: {}, generator: {}, batch_size_factor: {},\nstarting_size: {}".format(
+                                percentile,
+                                source_name, python_script, generator, batch_size_factor, starting_size))
+                        plot_info.savePlot(
+                            "{script}_confidence_student_t_{percentile}_{source_name}_{generator}_{batch_size}_{starting_size}".format(
+                                percentile=percentile,
+                                script=python_script.replace(".py", ""),
+                                source_name=source_name,
+                                batch_size=iterations[1],
+                                starting_size=starting_size,
+                                generator=generator))
+                        plt.close('all')
