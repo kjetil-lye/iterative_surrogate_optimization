@@ -12,6 +12,7 @@ import json
 import plot_info
 import collections
 import logging
+import scipy
 from ismo.ensemble import get_configuration_name, get_iteration_sizes, get_competitor_basename
 
 if __name__ == '__main__':
