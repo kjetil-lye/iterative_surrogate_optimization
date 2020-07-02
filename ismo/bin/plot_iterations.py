@@ -111,7 +111,7 @@ if __name__ == '__main__':
                     plt.xlabel("Objective value")
                     plt.ylabel("Number of samples")
                     plt.title("iteration: {}, type: {}, script: {}, generator: {}, batch_size_factor: {},\nstarting_size: {}".format(
-                        iteration, source_name, python_script, generator, batch_size_factor, starting_size))
+                        iteration, "objective", python_script, generator, batch_size_factor, starting_size))
                     plot_info.savePlot("evolution_hist_{script}_{source_name}_{generator}_{batch_size}_{starting_size}_{iteration}".format(
                         script=python_script.replace(".py", ""),
                         source_name="objective",
