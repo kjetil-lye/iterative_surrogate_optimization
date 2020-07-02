@@ -344,7 +344,7 @@ if __name__ == '__main__':
                         ## T test interval, see https://kite.com/python/answers/how-to-compute-the-confidence-interval-of-a-sample-statistic-in-python
                         ## for more information. This might not be the most accurate way of doing it though.
                         for source_index in range(2):
-                            confidence_intervals = np.zeros((2, source[source_index].sourceshape[0]))
+                            confidence_intervals = np.zeros((2, source[source_index].shape[0]))
 
                             for iteration in range(source[source_index].shape[0]):
                                 sample = source[source_index][iteration, :]
