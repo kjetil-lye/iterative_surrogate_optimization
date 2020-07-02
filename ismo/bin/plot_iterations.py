@@ -111,27 +111,30 @@ if __name__ == '__main__':
                 aux_value_per_iteration["objective"] = value_per_iteration
                 aux_value_per_iteration["liftdrag"] = aux_value_per_iteration["lift"]/aux_value_per_iteration["drag"]
                 for source_name in aux_value_per_iteration.keys():
-                    min_objective_value = np.min(aux_value_per_iteration[source_name][:, 0])
+                    try:
+                        min_objective_value = np.min(aux_value_per_iteration[source_name][:, 0])
 
-                    if source_name == "objective":
-                        max_objective_value = 2
-                    else:
-                        max_objective_value = np.max(aux_value_per_iteration[source_name][:, 0])
-                    for iteration in range(len(iterations)):
-                        plt.hist(aux_value_per_iteration[source_name][sum(iterations[:iteration]):sum(iterations[:iteration+1]),0],
-                                 bins=30, range=(min_objective_value, max_objective_value))
-                        plt.xlabel(f"{source_name} value")
-                        plt.ylabel("Number of samples")
-                        plt.title("iteration: {}, type: {}, script: {}, generator: {}, batch_size_factor: {},\nstarting_size: {}".format(
-                            iteration, source_name, python_script, generator, batch_size_factor, starting_size))
-                        plot_info.savePlot("evolution_hist_{script}_{source_name}_{generator}_{batch_size}_{starting_size}_{iteration}".format(
-                            script=python_script.replace(".py", ""),
-                            source_name=source_name,
-                            batch_size=iterations[1],
-                            starting_size=starting_size,
-                            generator=generator,
-                            iteration=iteration))
-                        plt.close('all')
+                        if source_name == "objective":
+                            max_objective_value = 2
+                        else:
+                            max_objective_value = np.max(aux_value_per_iteration[source_name][:, 0])
+                        for iteration in range(len(iterations)):
+                            plt.hist(aux_value_per_iteration[source_name][sum(iterations[:iteration]):sum(iterations[:iteration+1]),0],
+                                     bins=30, range=(min_objective_value, max_objective_value))
+                            plt.xlabel(f"{source_name} value")
+                            plt.ylabel("Number of samples")
+                            plt.title("iteration: {}, type: {}, script: {}, generator: {}, batch_size_factor: {},\nstarting_size: {}".format(
+                                iteration, source_name, python_script, generator, batch_size_factor, starting_size))
+                            plot_info.savePlot("evolution_hist_{script}_{source_name}_{generator}_{batch_size}_{starting_size}_{iteration}".format(
+                                script=python_script.replace(".py", ""),
+                                source_name=source_name,
+                                batch_size=iterations[1],
+                                starting_size=starting_size,
+                                generator=generator,
+                                iteration=iteration))
+                            plt.close('all')
+                    except:
+                        print("Skipping")
 
 
 
