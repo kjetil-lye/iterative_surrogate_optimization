@@ -110,6 +110,8 @@ if __name__ == '__main__':
 
                 aux_value_per_iteration["objective"] = value_per_iteration
                 aux_value_per_iteration["liftdrag"] = aux_value_per_iteration["lift"]/aux_value_per_iteration["drag"]
+                aux_value_per_iteration["draglift"] = aux_value_per_iteration["drag"]/aux_value_per_iteration["lift"]
+
                 for source_name in aux_value_per_iteration.keys():
                     try:
                         min_objective_value = np.min(aux_value_per_iteration[source_name][:, 0])
@@ -120,7 +122,7 @@ if __name__ == '__main__':
                             max_objective_value = np.max(aux_value_per_iteration[source_name][:, 0])
                         for iteration in range(len(iterations)):
                             plt.hist(aux_value_per_iteration[source_name][sum(iterations[:iteration]):sum(iterations[:iteration+1]),0],
-                                     bins=30, range=(min_objective_value, max_objective_value))
+                                     bins=15, range=(min_objective_value, max_objective_value))
                             plt.xlabel(f"{source_name} value")
                             plt.ylabel("Number of samples")
                             plt.title("iteration: {}, type: {}, script: {}, generator: {}, batch_size_factor: {},\nstarting_size: {}".format(
