@@ -57,17 +57,26 @@ parameter_sample_1
     parser.add_argument('--optimization_result_filename', type=str, default=None,
                         help='Where one should save the results.')
 
+    parser.add_argument('--do_not_draw_new_samples', action='store_true',
+                        help='Reuse old optimization values for next iteration')
+
 
 
     args = parser.parse_args()
 
     models = [tensorflow.keras.models.load_model(filename) for filename in args.input_model_files]
 
-    if args.end != -1:
-        starting_values = np.loadtxt(args.input_parameters_file)[args.start:args.end]
+    if not args.do_not_draw_new_samples:
+        if args.end != -1:
+            starting_values = np.loadtxt(args.input_parameters_file)[args.start:args.end]
+        else:
+            starting_values = np.loadtxt(args.input_parameters_file)[args.start:]
     else:
-        starting_values = np.loadtxt(args.input_parameters_file)[args.start:]
-
+        if args.end != -1:
+            length = args.end - args.start
+            starting_values = np.loadtxt(args.input_parameters_file)[args.start-length:args.end-length]
+        else:
+            raise Exception(f"You have to specify --end to something else than -1 when using --do_not_draw_new_samples")
     if args.optimization_parameter_file:
         with open (args.optimization_parameter_file) as config_file:
             optimization_configuration = json.load(config_file)

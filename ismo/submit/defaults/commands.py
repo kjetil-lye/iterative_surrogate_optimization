@@ -142,10 +142,7 @@ class Commands(object):
     def optimize(self, submitter, iteration_number):
         command = self.__run_python_module("ismo.bin.optimize")
 
-        if self.do_not_draw_new_samples and iteration_number > 1:
-            self.parameter_basename.format(iteration_number-1)
-        else:
-            input_parameters_file = self.parameter_for_optimization_basename.format(iteration_number)
+        input_parameters_file = self.parameter_basename.format(iteration_number-1)
 
         output_parameters_file = self.parameter_basename.format(iteration_number)
 
@@ -159,6 +156,9 @@ class Commands(object):
                                               input_parameters_file=input_parameters_file,
                                               **self.additional_optimizer_arguments,
                                               **self.additional_objective_arguments)
+
+        if self.do_not_draw_new_samples and iteration_number > 1:
+            command = command.with_boolean_argument(["do_not_draw_new_samples"])
 
         if self.optimization_results_filename is not None:
             command = command.with_long_arguments(optimization_result_filename=self.optimization_results_filename)
