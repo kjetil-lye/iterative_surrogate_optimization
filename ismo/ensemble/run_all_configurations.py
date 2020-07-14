@@ -30,7 +30,7 @@ def get_configuration_name(basename, rerun, starting_size, batch_size_factor):
 def run_configuration(*, script_name, source_folder, basename, rerun, iteration_sizes, repository_path, dry_run,
                       submitter_name,
                       only_missing, container, container_type,
-                      sample_generator, optimizer):
+                      sample_generator, optimizer, do_not_draw_new_samples):
     starting_size = iteration_sizes[0]
     batch_size_factor = iteration_sizes[0] / iteration_sizes[1]
 
@@ -70,6 +70,9 @@ def run_configuration(*, script_name, source_folder, basename, rerun, iteration_
                               optimizer
                               ]
 
+            if do_not_draw_new_samples:
+                command_to_run.append('--do_not_draw_new_samples')
+
             if container is not None:
                 command_to_run.extend(['--container', container])
             if container_type is not None:
@@ -102,7 +105,7 @@ def get_iteration_sizes(starting_size, batch_size_factor, compute_budget):
 
 def run_all_configurations(*, script_name, source_folder, basename, number_of_reruns,
                            starting_sizes, batch_size_factors, optimizer, generator, container, container_type,
-                           only_missing, repository_path, dry_run, submitter, compute_budget):
+                           only_missing, repository_path, dry_run, submitter, compute_budget, do_not_draw_new_samples=False):
     # This will be to store the competitors afterwards
     all_sample_sizes = []
     # Loop through configurations
@@ -124,7 +127,8 @@ def run_all_configurations(*, script_name, source_folder, basename, number_of_re
                                   sample_generator=generator,
                                   optimizer=optimizer,
                                   script_name=script_name,
-                                  source_folder=source_folder)
+                                  source_folder=source_folder,
+                                  do_not_draw_new_samples=do_not_draw_new_samples)
 
             for iteration_number, iteration_size in enumerate(iteration_sizes):
                 number_of_samples = sum(iteration_sizes[:iteration_number + 1])

@@ -55,6 +55,12 @@ Runs the ensemble for M different runs (to get some statistics).
     parser.add_argument('--optimizer', type=str, default='L-BFGS-B',
                         help='Name of optimizer')
 
+
+    parser.add_argument('--do_not_draw_new_samples', action='store_true',
+                        help='Reuse old optimization values for next iteration')
+
+
+
     args = parser.parse_args()
 
     # Save configuration for easy read afterwards
