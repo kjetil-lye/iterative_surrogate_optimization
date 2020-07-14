@@ -23,7 +23,8 @@ class Commands(object):
                  sample_generator_name='monte-carlo',
                  output_append=False,
                  reuse_model=False,
-                 optimization_results_filename = None
+                 optimization_results_filename = None,
+                 do_not_draw_new_samples = False
                  ):
         self.prefix = prefix
 
@@ -73,6 +74,8 @@ class Commands(object):
         self.sample_generator_name = sample_generator_name
 
         self.optimization_results_filename = optimization_results_filename
+
+        self.do_not_draw_new_samples = do_not_draw_new_samples
 
     def add_start_end_values(self, command):
         if not self.output_append:
@@ -139,7 +142,10 @@ class Commands(object):
     def optimize(self, submitter, iteration_number):
         command = self.__run_python_module("ismo.bin.optimize")
 
-        input_parameters_file = self.parameter_for_optimization_basename.format(iteration_number)
+        if self.do_not_draw_new_samples and iteration_number > 1:
+            self.parameter_basename.format(iteration_number-1)
+        else:
+            input_parameters_file = self.parameter_for_optimization_basename.format(iteration_number)
 
         output_parameters_file = self.parameter_basename.format(iteration_number)
 
