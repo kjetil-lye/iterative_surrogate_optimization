@@ -114,8 +114,6 @@ if __name__ == '__main__':
                 # Histogram evolution
 
                 aux_value_per_iteration["objective"] = value_per_iteration
-                aux_value_per_iteration["liftdrag"] = aux_value_per_iteration["lift"]/aux_value_per_iteration["drag"]
-                aux_value_per_iteration["draglift"] = aux_value_per_iteration["drag"]/aux_value_per_iteration["lift"]
 
                 for source_name in aux_value_per_iteration.keys():
                     try:
@@ -237,14 +235,14 @@ if __name__ == '__main__':
                 for source_name, source in sources.items():
                     batch_size = iterations[1]
                     iteration_range = np.arange(0, len(iterations))
-
+                    plt.close('all')
                     plt.errorbar(iteration_range, np.mean(source[0], 1)*args.scale_objective,
                                  yerr=np.std(source[0], 1)*args.scale_objective, label='ISMO',
-                                 fmt='o', uplims=True, lolims=True)
+                                 fmt='o', uplims=True, lolims=True, color='C0')
 
                     plt.errorbar(iteration_range + 1, np.mean(source[1], 1)*args.scale_objective,
                                  yerr=np.std(source[1], 1)*args.scale_objective, label='DNN+Opt',
-                                 fmt='*', uplims=True, lolims=True)
+                                 fmt='*', uplims=True, lolims=True, color='C1')
 
                     print("#" * 80)
                     print(f"starting_size = {starting_size}, batch_size_factor = {batch_size_factor}")
