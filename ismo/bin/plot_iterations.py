@@ -28,6 +28,9 @@ if __name__ == '__main__':
                              ' (eg. drag, lift and area for an airfoil). '
                              'Should have the format {"name1":"filename1", "name2":"filename2"}')
 
+    parser.add_argument('--scale_objective', type=float, default=1.0,
+                        help='Scale objective function for output')
+
     args = parser.parse_args()
 
     if args.aux_names is not None:
@@ -38,6 +41,8 @@ if __name__ == '__main__':
 
     with open('ensemble_setup.json') as f:
         configuration = json.load(f)
+
+
 
     python_script = configuration['script_name']
     compute_budget = configuration['compute_budget']
@@ -233,12 +238,12 @@ if __name__ == '__main__':
                     batch_size = iterations[1]
                     iteration_range = np.arange(0, len(iterations))
 
-                    plt.errorbar(iteration_range, np.mean(source[0], 1),
-                                 yerr=np.std(source[0], 1), label='ISMO',
+                    plt.errorbar(iteration_range, np.mean(source[0], 1)*args.scale_objective,
+                                 yerr=np.std(source[0], 1)*args.scale_objective, label='ISMO',
                                  fmt='o', uplims=True, lolims=True)
 
-                    plt.errorbar(iteration_range + 1, np.mean(source[1], 1),
-                                 yerr=np.std(source[1], 1), label='DNN+Opt',
+                    plt.errorbar(iteration_range + 1, np.mean(source[1], 1)*args.scale_objective,
+                                 yerr=np.std(source[1], 1)*args.scale_objective, label='DNN+Opt',
                                  fmt='*', uplims=True, lolims=True)
 
                     print("#" * 80)
