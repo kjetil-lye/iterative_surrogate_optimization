@@ -3,6 +3,15 @@
 import ismo.train
 import os.path
 
+
+class LossWriter:
+    def __init__(self, basename):
+        self.basename = basename
+
+    def __call__(self, loss):
+        np.save(f'{self.basename}', loss.history['loss'])
+
+
 if __name__ == '__main__':
     import argparse
 
@@ -39,6 +48,10 @@ value_sample_1
     parser.add_argument('--reuse_model', action='store_true',
                         help='Reuse the model')
 
+    parser.add_argument('--save_loss_output_file', type=str,
+                        help="Save the loss as a function of training epochs")
+
+
 
     args = parser.parse_args()
 
@@ -72,6 +85,9 @@ value_sample_1
 
     if args.reuse_model and os.path.exists(args.output_model_file):
         trainer.load_from_file(args.output_model_file)
+
+    if args.save_loss_output_file is not None:
+        trainer.add_loss_history_writer(LossWriter(args.save_loss_output_file))
 
     trainer.fit(all_parameters, all_values)
 

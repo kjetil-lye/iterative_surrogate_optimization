@@ -23,8 +23,9 @@ class Commands(object):
                  sample_generator_name='monte-carlo',
                  output_append=False,
                  reuse_model=False,
-                 optimization_results_filename = None,
-                 do_not_draw_new_samples = False
+                 optimization_results_filename=None,
+                 do_not_draw_new_samples=False,
+                 save_loss_function=False
                  ):
         self.prefix = prefix
 
@@ -45,6 +46,7 @@ class Commands(object):
             self.values_basename = prefix + 'values_{value_number}.txt'
             self.objective_basename = prefix + 'objective.txt'
 
+        self.loss_function_basename = prefix + '_loss_{iteration_number}_{value_number}.npy'
         self.python_command = python_command
         self.training_parameter_config_file = training_parameter_config_file
 
@@ -76,6 +78,8 @@ class Commands(object):
         self.optimization_results_filename = optimization_results_filename
 
         self.do_not_draw_new_samples = do_not_draw_new_samples
+
+        self.save_loss_function = save_loss_function
 
     def add_start_end_values(self, command):
         if not self.output_append:
@@ -111,8 +115,13 @@ class Commands(object):
                 input_parameters_file=input_parameters_files,
                 input_values_file=input_values_files,
                 simple_configuration_file=self.training_parameter_config_file,
-                output_model_file=output_model_file
+                output_model_file=output_model_file,
+
             )
+            if self.save_loss_function:
+                command = command.with_long_arguments(
+                    save_loss_output_file=self.loss_function_basename.format(iteration_number=iteration_number,
+                                                                             value_number=value_number))
             if self.reuse_model:
                 command = command.with_boolean_argument('reuse_model')
 
@@ -142,7 +151,7 @@ class Commands(object):
     def optimize(self, submitter, iteration_number):
         command = self.__run_python_module("ismo.bin.optimize")
 
-        input_parameters_file = self.parameter_basename.format(iteration_number-1)
+        input_parameters_file = self.parameter_basename.format(iteration_number - 1)
 
         output_parameters_file = self.parameter_basename.format(iteration_number)
 
