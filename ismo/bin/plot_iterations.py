@@ -267,6 +267,15 @@ if __name__ == '__main__':
                         batch_size=iterations[1],
                         starting_size=starting_size,
                         generator=generator))
+
+                    plt.yscale("log", base=2)
+                    plot_info.savePlot("{script}_{source_name}_{generator}_{batch_size}_{starting_size}_log".format(
+                        script=python_script.replace(".py", ""),
+                        source_name=source_name,
+                        batch_size=iterations[1],
+                        starting_size=starting_size,
+                        generator=generator))
+
                     plt.close('all')
 
                     ## min/max
@@ -298,6 +307,15 @@ if __name__ == '__main__':
                         batch_size=iterations[1],
                         starting_size=starting_size,
                         generator=generator))
+
+                    plt.yscale("log", base=2)
+                    plot_info.savePlot("{script}_min_max_{source_name}_{generator}_{batch_size}_{starting_size}_log".format(
+                        script=python_script.replace(".py", ""),
+                        source_name=source_name,
+                        batch_size=iterations[1],
+                        starting_size=starting_size,
+                        generator=generator))
+
                     plt.close('all')
 
                     plot_info.saveData(f"ismo_{python_script.replace('.py', '')}_{source_name}_{generator}_{batch_size}_{starting_size}",
