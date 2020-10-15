@@ -156,4 +156,5 @@ def run_all_configurations(*, script_name, source_folder, basename, number_of_re
                               sample_generator=generator,
                               optimizer=optimizer,
                               script_name=script_name,
-                              source_folder=source_folder)
+                              source_folder=source_folder,
+                              do_not_draw_new_samples=do_not_draw_new_samples)
