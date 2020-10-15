@@ -268,7 +268,7 @@ if __name__ == '__main__':
                         starting_size=starting_size,
                         generator=generator))
 
-                    plt.yscale("log", base=2)
+                    plt.yscale("log", basey=2)
                     plot_info.savePlot("{script}_{source_name}_{generator}_{batch_size}_{starting_size}_log".format(
                         script=python_script.replace(".py", ""),
                         source_name=source_name,
@@ -308,7 +308,7 @@ if __name__ == '__main__':
                         starting_size=starting_size,
                         generator=generator))
 
-                    plt.yscale("log", base=2)
+                    plt.yscale("log", basey=2)
                     plot_info.savePlot("{script}_min_max_{source_name}_{generator}_{batch_size}_{starting_size}_log".format(
                         script=python_script.replace(".py", ""),
                         source_name=source_name,
