@@ -84,7 +84,8 @@ if __name__ == '__main__':
                             end_index = sum(iterations[:iteration + 1])
                             all_values = np.loadtxt(output_objective)
                             values = all_values[start_index:end_index]
-                            # values = values[~np.isnan(values)]
+                            values = values[~np.isnan(values)]
+
                             min_value = np.min(values)
 
                             value_per_iteration[:, rerun] = all_values
@@ -208,7 +209,7 @@ if __name__ == '__main__':
                             values = np.loadtxt(output_objective)
 
                             assert (values.shape[0] == number_of_samples)
-                            # values = values[~np.isnan(values)]
+                            values = values[~np.isnan(values)]
                             all_values.extend(values)
 
                             min_value = np.min(all_values)
