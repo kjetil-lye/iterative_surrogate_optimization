@@ -27,7 +27,7 @@ smmap==3.0.1
 sobol==0.9
 sobol-seq==0.1.2
 tensorboard==1.13.1
-tensorflow==2.1.0
+tensorflow==2.9.3
 tensorflow-estimator==1.13.0
 termcolor==1.1.0
 Werkzeug==0.15.4
